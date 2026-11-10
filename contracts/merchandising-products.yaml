@@ -1,0 +1,20 @@
+name: merchandising-products
+version: 1.0.0
+owner: merchandising-team
+description: Catalogue des produits cosmetiques
+schema:
+  - {name: product_id, type: string,  required: true}
+  - {name: name,       type: string,  required: true}
+  - {name: brand,      type: string,  required: true}
+  - {name: category,   type: string,  required: true}
+  - {name: price,      type: float,   required: true}
+  - {name: volume_ml,  type: integer, required: false}
+  - {name: stock_qty,  type: integer, required: true}
+invariants:
+  - "price > 0"
+  - "stock_qty >= 0"
+  - "product_id is unique"
+sla:
+  freshness_max_minutes: 60
+  availability_percent: 99.5
+compatibility: backward
