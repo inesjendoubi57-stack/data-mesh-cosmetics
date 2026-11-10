@@ -1,93 +1,58 @@
 
 from fastapi import APIRouter, HTTPException
 from app.schemas.delivery import Delivery
+from datetime import datetime
 
 router = APIRouter()
 
-# Données temporaires des livraisons
 deliveries = {
-    1: Delivery(
-        order_id=1,
-        product_id=1,
+    "1": Delivery(
+        order_id="1",
+        product_id="1",
         quantity=2,
-        delivery_status="Pending"
+        status="Pending",
+        carrier=None,
+        shipped_at=None
     ),
-    2: Delivery(
-        order_id=2,
-        product_id=2,
+    "2": Delivery(
+        order_id="2",
+        product_id="2",
         quantity=1,
-        delivery_status="Delivered"
+        status="Delivered",
+        carrier="DHL",
+        shipped_at=datetime(2026, 11, 9, 10, 0)
     )
 }
 
-# GET : récupérer toutes les livraisons
 @router.get("/")
 def get_deliveries():
     return list(deliveries.values())
 
-
-# GET : récupérer une livraison par ID
 @router.get("/{order_id}")
-def get_delivery(order_id: int):
+def get_delivery(order_id: str):
     if order_id not in deliveries:
-        raise HTTPException(
-            status_code=404,
-            detail="Delivery not found"
-        )
+        raise HTTPException(status_code=404, detail="Order not found")
     return deliveries[order_id]
 
-
-# POST : ajouter une livraison
 @router.post("/")
-def add_delivery(delivery: Delivery):
+def create_delivery(delivery: Delivery):
     if delivery.order_id in deliveries:
-        raise HTTPException(
-            status_code=400,
-            detail="Delivery already exists"
-        )
-
+        raise HTTPException(status_code=400, detail="Order already exists")
     deliveries[delivery.order_id] = delivery
+    return delivery
 
-    return {
-        "message": "Delivery added successfully",
-        "delivery": delivery
-    }
-
-
-# PUT : modifier une livraison
 @router.put("/{order_id}")
-def update_delivery(order_id: int, delivery: Delivery):
+def update_delivery(order_id: str, delivery: Delivery):
     if order_id not in deliveries:
-        raise HTTPException(
-            status_code=404,
-            detail="Delivery not found"
-        )
-
-    if delivery.order_id != order_id:
-        raise HTTPException(
-            status_code=400,
-            detail="Order ID mismatch"
-        )
-
+        raise HTTPException(status_code=404, detail="Order not found")
+    if order_id != delivery.order_id:
+        raise HTTPException(status_code=400, detail="Order ID mismatch")
     deliveries[order_id] = delivery
+    return delivery
 
-    return {
-        "message": "Delivery updated successfully",
-        "delivery": delivery
-    }
-
-
-# DELETE : supprimer une livraison
 @router.delete("/{order_id}")
-def delete_delivery(order_id: int):
+def delete_delivery(order_id: str):
     if order_id not in deliveries:
-        raise HTTPException(
-            status_code=404,
-            detail="Delivery not found"
-        )
-
+        raise HTTPException(status_code=404, detail="Order not found")
     del deliveries[order_id]
-
-    return {
-        "message": "Delivery deleted successfully"
-    }
+    return {"message": "Order deleted successfully"}

@@ -1,7 +1,11 @@
+
+from datetime import datetime
 from pydantic import BaseModel, Field
 
 class Delivery(BaseModel):
-    order_id: int
-    product_id: int
+    order_id: str
+    product_id: str
     quantity: int = Field(gt=0)
-    delivery_status: str
+    status: str
+    carrier: str | None = None
+    shipped_at: datetime | None = None
