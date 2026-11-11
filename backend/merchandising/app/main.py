@@ -1,12 +1,23 @@
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
+from app.database import initialize_database
 from app.routes.products import router as products_router
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    initialize_database()
+    yield
+
 
 # Création de l'application FastAPI
 app = FastAPI(
     title="Merchandising Service",
     description="API for managing cosmetic products",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan,
 )
 
 # Connexion des routes Products

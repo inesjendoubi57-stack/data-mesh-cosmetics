@@ -1,57 +1,43 @@
 
+import sqlite3
+
 from fastapi import APIRouter, HTTPException
+from app import database
 from app.schemas.payment import Payment
 
 router = APIRouter()
 
-payments = {
-    "1": Payment(
-        invoice_id="1",
-        order_id="101",
-        amount=120.5,
-        currency="TND",
-        payment_method="Card",
-        payment_status="Paid"
-    ),
-    "2": Payment(
-        invoice_id="2",
-        order_id="102",
-        amount=75.0,
-        currency="TND",
-        payment_method="Cash",
-        payment_status="Pending"
-    )
-}
-
 @router.get("/")
 def get_payments():
-    return list(payments.values())
+    return database.list_payments()
 
 @router.get("/{invoice_id}")
 def get_payment(invoice_id: str):
-    if invoice_id not in payments:
+    payment = database.get_payment(invoice_id)
+    if payment is None:
         raise HTTPException(status_code=404, detail="Invoice not found")
-    return payments[invoice_id]
+    return payment
 
 @router.post("/")
 def create_payment(payment: Payment):
-    if payment.invoice_id in payments:
-        raise HTTPException(status_code=400, detail="Invoice already exists")
-    payments[payment.invoice_id] = payment
+    try:
+        database.create_payment(payment)
+    except sqlite3.IntegrityError as error:
+        raise HTTPException(status_code=400, detail="Invoice already exists") from error
     return payment
 
 @router.put("/{invoice_id}")
 def update_payment(invoice_id: str, payment: Payment):
-    if invoice_id not in payments:
+    if database.get_payment(invoice_id) is None:
         raise HTTPException(status_code=404, detail="Invoice not found")
     if invoice_id != payment.invoice_id:
         raise HTTPException(status_code=400, detail="Invoice ID mismatch")
-    payments[invoice_id] = payment
+    if not database.update_payment(payment):
+        raise HTTPException(status_code=404, detail="Invoice not found")
     return payment
 
 @router.delete("/{invoice_id}")
 def delete_payment(invoice_id: str):
-    if invoice_id not in payments:
+    if not database.delete_payment(invoice_id):
         raise HTTPException(status_code=404, detail="Invoice not found")
-    del payments[invoice_id]
     return {"message": "Invoice deleted successfully"}

@@ -61,6 +61,12 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+backend/merchandising/products.db
+backend/merchandising/products.db-journal
+backend/fulfillment/fulfillment.db
+backend/fulfillment/fulfillment.db-journal
+backend/customer_finance/customer_finance.db
+backend/customer_finance/customer_finance.db-journal
 
 # Flask stuff:
 instance/
