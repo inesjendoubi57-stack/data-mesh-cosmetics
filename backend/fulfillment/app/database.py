@@ -1,6 +1,6 @@
 import sqlite3
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
@@ -50,9 +50,19 @@ def initialize_database() -> None:
                 quantity INTEGER NOT NULL CHECK (quantity > 0),
                 status TEXT NOT NULL,
                 carrier TEXT,
-                shipped_at TEXT
+                shipped_at TEXT,
+                updated_at TEXT NOT NULL
             )
             """
+        )
+        columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(deliveries)")
+        }
+        if "updated_at" not in columns:
+            connection.execute("ALTER TABLE deliveries ADD COLUMN updated_at TEXT")
+        connection.execute(
+            "UPDATE deliveries SET updated_at = ? WHERE updated_at IS NULL",
+            (datetime.now(timezone.utc).isoformat(),),
         )
         delivery_count = connection.execute(
             "SELECT COUNT(*) FROM deliveries"
@@ -61,8 +71,8 @@ def initialize_database() -> None:
             connection.executemany(
                 """
                 INSERT INTO deliveries (
-                    order_id, product_id, quantity, status, carrier, shipped_at
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                    order_id, product_id, quantity, status, carrier, shipped_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 [
                     (
@@ -72,6 +82,7 @@ def initialize_database() -> None:
                         delivery.status,
                         delivery.carrier,
                         delivery.shipped_at.isoformat() if delivery.shipped_at else None,
+                        delivery.updated_at.isoformat(),
                     )
                     for delivery in INITIAL_DELIVERIES
                 ],
@@ -100,8 +111,8 @@ def create_delivery(delivery: Delivery) -> None:
         connection.execute(
             """
             INSERT INTO deliveries (
-                order_id, product_id, quantity, status, carrier, shipped_at
-            ) VALUES (?, ?, ?, ?, ?, ?)
+                order_id, product_id, quantity, status, carrier, shipped_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 delivery.order_id,
@@ -110,6 +121,7 @@ def create_delivery(delivery: Delivery) -> None:
                 delivery.status,
                 delivery.carrier,
                 delivery.shipped_at.isoformat() if delivery.shipped_at else None,
+                datetime.now(timezone.utc).isoformat(),
             ),
         )
 
@@ -119,7 +131,8 @@ def update_delivery(delivery: Delivery) -> bool:
         cursor = connection.execute(
             """
             UPDATE deliveries
-            SET product_id = ?, quantity = ?, status = ?, carrier = ?, shipped_at = ?
+            SET product_id = ?, quantity = ?, status = ?, carrier = ?, shipped_at = ?,
+                updated_at = ?
             WHERE order_id = ?
             """,
             (
@@ -128,6 +141,7 @@ def update_delivery(delivery: Delivery) -> bool:
                 delivery.status,
                 delivery.carrier,
                 delivery.shipped_at.isoformat() if delivery.shipped_at else None,
+                datetime.now(timezone.utc).isoformat(),
                 delivery.order_id,
             ),
         )

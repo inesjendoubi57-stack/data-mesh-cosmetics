@@ -24,7 +24,7 @@ def create_product(product: Product):
         database.create_product(product)
     except sqlite3.IntegrityError as error:
         raise HTTPException(status_code=400, detail="Product already exists") from error
-    return product
+    return database.get_product(product.product_id)
 
 @router.put("/{product_id}")
 def update_product(product_id: str, product: Product):
@@ -32,7 +32,7 @@ def update_product(product_id: str, product: Product):
         raise HTTPException(status_code=400, detail="Product ID mismatch")
     if not database.update_product(product):
         raise HTTPException(status_code=404, detail="Product not found")
-    return product
+    return database.get_product(product.product_id)
 
 @router.delete("/{product_id}")
 def delete_product(product_id: str):

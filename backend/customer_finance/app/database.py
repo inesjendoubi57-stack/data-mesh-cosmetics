@@ -1,5 +1,6 @@
 import sqlite3
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
@@ -51,9 +52,19 @@ def initialize_database() -> None:
                 amount REAL NOT NULL CHECK (amount > 0),
                 currency TEXT NOT NULL,
                 payment_method TEXT NOT NULL,
-                payment_status TEXT NOT NULL
+                payment_status TEXT NOT NULL,
+                updated_at TEXT NOT NULL
             )
             """
+        )
+        columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(payments)")
+        }
+        if "updated_at" not in columns:
+            connection.execute("ALTER TABLE payments ADD COLUMN updated_at TEXT")
+        connection.execute(
+            "UPDATE payments SET updated_at = ? WHERE updated_at IS NULL",
+            (datetime.now(timezone.utc).isoformat(),),
         )
         payment_count = connection.execute(
             "SELECT COUNT(*) FROM payments"
@@ -62,8 +73,9 @@ def initialize_database() -> None:
             connection.executemany(
                 """
                 INSERT INTO payments (
-                    invoice_id, order_id, amount, currency, payment_method, payment_status
-                ) VALUES (?, ?, ?, ?, ?, ?)
+                    invoice_id, order_id, amount, currency, payment_method, payment_status,
+                    updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?)
                 """,
                 [
                     (
@@ -73,6 +85,7 @@ def initialize_database() -> None:
                         payment.currency,
                         payment.payment_method,
                         payment.payment_status,
+                        payment.updated_at.isoformat(),
                     )
                     for payment in INITIAL_PAYMENTS
                 ],
@@ -101,8 +114,9 @@ def create_payment(payment: Payment) -> None:
         connection.execute(
             """
             INSERT INTO payments (
-                invoice_id, order_id, amount, currency, payment_method, payment_status
-            ) VALUES (?, ?, ?, ?, ?, ?)
+                invoice_id, order_id, amount, currency, payment_method, payment_status,
+                updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 payment.invoice_id,
@@ -111,6 +125,7 @@ def create_payment(payment: Payment) -> None:
                 payment.currency,
                 payment.payment_method,
                 payment.payment_status,
+                datetime.now(timezone.utc).isoformat(),
             ),
         )
 
@@ -120,7 +135,8 @@ def update_payment(payment: Payment) -> bool:
         cursor = connection.execute(
             """
             UPDATE payments
-            SET order_id = ?, amount = ?, currency = ?, payment_method = ?, payment_status = ?
+            SET order_id = ?, amount = ?, currency = ?, payment_method = ?, payment_status = ?,
+                updated_at = ?
             WHERE invoice_id = ?
             """,
             (
@@ -129,6 +145,7 @@ def update_payment(payment: Payment) -> bool:
                 payment.currency,
                 payment.payment_method,
                 payment.payment_status,
+                datetime.now(timezone.utc).isoformat(),
                 payment.invoice_id,
             ),
         )

@@ -1,5 +1,6 @@
 import sqlite3
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
@@ -54,9 +55,19 @@ def initialize_database() -> None:
                 category TEXT NOT NULL,
                 price REAL NOT NULL CHECK (price > 0),
                 volume_ml INTEGER,
-                stock_qty INTEGER NOT NULL CHECK (stock_qty >= 0)
+                stock_qty INTEGER NOT NULL CHECK (stock_qty >= 0),
+                updated_at TEXT NOT NULL
             )
             """
+        )
+        columns = {
+            row["name"] for row in connection.execute("PRAGMA table_info(products)")
+        }
+        if "updated_at" not in columns:
+            connection.execute("ALTER TABLE products ADD COLUMN updated_at TEXT")
+        connection.execute(
+            "UPDATE products SET updated_at = ? WHERE updated_at IS NULL",
+            (datetime.now(timezone.utc).isoformat(),),
         )
         product_count = connection.execute(
             "SELECT COUNT(*) FROM products"
@@ -65,8 +76,8 @@ def initialize_database() -> None:
             connection.executemany(
                 """
                 INSERT INTO products (
-                    product_id, name, brand, category, price, volume_ml, stock_qty
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    product_id, name, brand, category, price, volume_ml, stock_qty, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 [
                     (
@@ -77,6 +88,7 @@ def initialize_database() -> None:
                         product.price,
                         product.volume_ml,
                         product.stock_qty,
+                        product.updated_at.isoformat(),
                     )
                     for product in INITIAL_PRODUCTS
                 ],
@@ -105,8 +117,8 @@ def create_product(product: Product) -> None:
         connection.execute(
             """
             INSERT INTO products (
-                product_id, name, brand, category, price, volume_ml, stock_qty
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                product_id, name, brand, category, price, volume_ml, stock_qty, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 product.product_id,
@@ -116,6 +128,7 @@ def create_product(product: Product) -> None:
                 product.price,
                 product.volume_ml,
                 product.stock_qty,
+                datetime.now(timezone.utc).isoformat(),
             ),
         )
 
@@ -125,7 +138,8 @@ def update_product(product: Product) -> bool:
         cursor = connection.execute(
             """
             UPDATE products
-            SET name = ?, brand = ?, category = ?, price = ?, volume_ml = ?, stock_qty = ?
+            SET name = ?, brand = ?, category = ?, price = ?, volume_ml = ?, stock_qty = ?,
+                updated_at = ?
             WHERE product_id = ?
             """,
             (
@@ -135,6 +149,7 @@ def update_product(product: Product) -> bool:
                 product.price,
                 product.volume_ml,
                 product.stock_qty,
+                datetime.now(timezone.utc).isoformat(),
                 product.product_id,
             ),
         )
