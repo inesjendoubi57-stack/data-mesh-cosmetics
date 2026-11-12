@@ -4,12 +4,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
-from app.schemas.payment import Payment
+from app.schemas.payment import Payment, PaymentInput
 
 DATABASE_PATH = Path(__file__).resolve().parent.parent / "customer_finance.db"
 
 INITIAL_PAYMENTS = (
-    Payment(
+    PaymentInput(
         invoice_id="1",
         order_id="101",
         amount=120.5,
@@ -17,7 +17,7 @@ INITIAL_PAYMENTS = (
         payment_method="Card",
         payment_status="Paid",
     ),
-    Payment(
+    PaymentInput(
         invoice_id="2",
         order_id="102",
         amount=75.0,
@@ -85,7 +85,7 @@ def initialize_database() -> None:
                         payment.currency,
                         payment.payment_method,
                         payment.payment_status,
-                        payment.updated_at.isoformat(),
+                        datetime.now(timezone.utc).isoformat(),
                     )
                     for payment in INITIAL_PAYMENTS
                 ],
@@ -109,7 +109,7 @@ def get_payment(invoice_id: str) -> Payment | None:
     return Payment(**dict(row)) if row is not None else None
 
 
-def create_payment(payment: Payment) -> None:
+def create_payment(payment: PaymentInput) -> None:
     with get_connection() as connection:
         connection.execute(
             """
@@ -130,7 +130,7 @@ def create_payment(payment: Payment) -> None:
         )
 
 
-def update_payment(payment: Payment) -> bool:
+def update_payment(payment: PaymentInput) -> bool:
     with get_connection() as connection:
         cursor = connection.execute(
             """

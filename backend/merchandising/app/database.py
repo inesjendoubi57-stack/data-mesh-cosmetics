@@ -4,12 +4,12 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
-from app.schemas.product import Product
+from app.schemas.product import Product, ProductInput
 
 DATABASE_PATH = Path(__file__).resolve().parent.parent / "products.db"
 
 INITIAL_PRODUCTS = (
-    Product(
+    ProductInput(
         product_id="1",
         name="Lipstick",
         brand="Maybelline",
@@ -18,7 +18,7 @@ INITIAL_PRODUCTS = (
         volume_ml=None,
         stock_qty=50,
     ),
-    Product(
+    ProductInput(
         product_id="2",
         name="Face Cream",
         brand="Nivea",
@@ -88,7 +88,7 @@ def initialize_database() -> None:
                         product.price,
                         product.volume_ml,
                         product.stock_qty,
-                        product.updated_at.isoformat(),
+                        datetime.now(timezone.utc).isoformat(),
                     )
                     for product in INITIAL_PRODUCTS
                 ],
@@ -112,7 +112,7 @@ def get_product(product_id: str) -> Product | None:
     return Product(**dict(row)) if row is not None else None
 
 
-def create_product(product: Product) -> None:
+def create_product(product: ProductInput) -> None:
     with get_connection() as connection:
         connection.execute(
             """
@@ -133,7 +133,7 @@ def create_product(product: Product) -> None:
         )
 
 
-def update_product(product: Product) -> bool:
+def update_product(product: ProductInput) -> bool:
     with get_connection() as connection:
         cursor = connection.execute(
             """
