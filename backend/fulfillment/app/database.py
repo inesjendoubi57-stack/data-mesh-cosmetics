@@ -4,18 +4,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterator
 
-from app.schemas.delivery import Delivery
+from app.schemas.delivery import Delivery, DeliveryInput
 
 DATABASE_PATH = Path(__file__).resolve().parent.parent / "fulfillment.db"
 
 INITIAL_DELIVERIES = (
-    Delivery(
+    DeliveryInput(
         order_id="1",
         product_id="1",
         quantity=2,
         status="Pending",
     ),
-    Delivery(
+    DeliveryInput(
         order_id="2",
         product_id="2",
         quantity=1,
@@ -82,7 +82,7 @@ def initialize_database() -> None:
                         delivery.status,
                         delivery.carrier,
                         delivery.shipped_at.isoformat() if delivery.shipped_at else None,
-                        delivery.updated_at.isoformat(),
+                        datetime.now(timezone.utc).isoformat(),
                     )
                     for delivery in INITIAL_DELIVERIES
                 ],
@@ -106,7 +106,7 @@ def get_delivery(order_id: str) -> Delivery | None:
     return Delivery(**dict(row)) if row is not None else None
 
 
-def create_delivery(delivery: Delivery) -> None:
+def create_delivery(delivery: DeliveryInput) -> None:
     with get_connection() as connection:
         connection.execute(
             """
@@ -126,7 +126,7 @@ def create_delivery(delivery: Delivery) -> None:
         )
 
 
-def update_delivery(delivery: Delivery) -> bool:
+def update_delivery(delivery: DeliveryInput) -> bool:
     with get_connection() as connection:
         cursor = connection.execute(
             """

@@ -1,14 +1,24 @@
 
 from datetime import datetime, timezone
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
-class Payment(BaseModel):
+class PaymentInput(BaseModel):
     invoice_id: str
     order_id: str
     amount: float = Field(gt=0)
     currency: str
     payment_method: str
     payment_status: str
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+class Payment(PaymentInput):
+    updated_at: datetime
+
+    @field_validator("updated_at")
+    @classmethod
+    def normalize_updated_at(cls, value: datetime) -> datetime:
+        if value.tzinfo is None:
+            return value.replace(tzinfo=timezone.utc)
+        return value.astimezone(timezone.utc)
