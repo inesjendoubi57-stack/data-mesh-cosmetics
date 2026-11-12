@@ -23,7 +23,7 @@ def create_delivery(delivery: Delivery):
         database.create_delivery(delivery)
     except sqlite3.IntegrityError as error:
         raise HTTPException(status_code=400, detail="Order already exists") from error
-    return delivery
+    return database.get_delivery(delivery.order_id)
 
 @router.put("/{order_id}")
 def update_delivery(order_id: str, delivery: Delivery):
@@ -33,7 +33,7 @@ def update_delivery(order_id: str, delivery: Delivery):
         raise HTTPException(status_code=400, detail="Order ID mismatch")
     if not database.update_delivery(delivery):
         raise HTTPException(status_code=404, detail="Order not found")
-    return delivery
+    return database.get_delivery(delivery.order_id)
 
 @router.delete("/{order_id}")
 def delete_delivery(order_id: str):

@@ -24,7 +24,7 @@ def create_payment(payment: Payment):
         database.create_payment(payment)
     except sqlite3.IntegrityError as error:
         raise HTTPException(status_code=400, detail="Invoice already exists") from error
-    return payment
+    return database.get_payment(payment.invoice_id)
 
 @router.put("/{invoice_id}")
 def update_payment(invoice_id: str, payment: Payment):
@@ -34,7 +34,7 @@ def update_payment(invoice_id: str, payment: Payment):
         raise HTTPException(status_code=400, detail="Invoice ID mismatch")
     if not database.update_payment(payment):
         raise HTTPException(status_code=404, detail="Invoice not found")
-    return payment
+    return database.get_payment(payment.invoice_id)
 
 @router.delete("/{invoice_id}")
 def delete_payment(invoice_id: str):
