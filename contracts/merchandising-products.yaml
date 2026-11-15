@@ -3,13 +3,14 @@ version: 1.0.0
 owner: merchandising-team
 description: Catalogue des produits cosmetiques
 schema:
-  - {name: product_id, type: string,  required: true}
-  - {name: name,       type: string,  required: true}
-  - {name: brand,      type: string,  required: true}
-  - {name: category,   type: string,  required: true}
-  - {name: price,      type: float,   required: true}
-  - {name: volume_ml,  type: integer, required: false}
-  - {name: stock_qty,  type: integer, required: true}
+  - {name: product_id, type: string, required: true}
+  - {name: name, type: string, required: true}
+  - {name: brand, type: string, required: true}
+  - {name: category, type: string, required: true}
+  - {name: price, type: float, required: true}
+  - {name: volume_ml, type: integer, required: false}
+  - {name: stock_qty, type: integer, required: true}
+  - {name: updated_at, type: datetime, required: true}
 invariants:
   - "price > 0"
   - "stock_qty >= 0"

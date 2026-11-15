@@ -1,0 +1,1279 @@
+{
+    "source_contract": "merchandising-products",
+    "total_scenarios": 10,
+    "scenarios": [
+        {
+            "id": 1,
+            "title": "Remove an existing required field",
+            "category": "Structural change",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Remove the required field 'price'.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 2,
+            "title": "Rename an existing field",
+            "category": "Structural change",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Rename 'updated_at' to 'last_updated'.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "last_updated",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 3,
+            "title": "Change an existing field data type",
+            "category": "Structural change",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Change the type of 'price' from float to string.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 4,
+            "title": "Add a new required field",
+            "category": "Structural change",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Add the required field 'supplier_code'.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    },
+                    {
+                        "name": "supplier_code",
+                        "type": "string",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 5,
+            "title": "Change optional field to required",
+            "category": "Structural change",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Change 'volume_ml' from optional to required.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 6,
+            "title": "Add a new optional field",
+            "category": "Conditional change",
+            "expected_result": "REVIEW_REQUIRED",
+            "description": "Add the optional field 'product_color'. Compatibility depends on whether consumers accept extra fields.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "1.1.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    },
+                    {
+                        "name": "product_color",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 7,
+            "title": "Tighten a numeric business constraint",
+            "category": "Business invariant",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Change stock_qty >= 0 to stock_qty > 0.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty > 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 8,
+            "title": "Remove an allowed enum value",
+            "category": "Business invariant",
+            "expected_result": "INCOMPATIBLE",
+            "description": "Remove 'discontinued' from the allowed values.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    },
+                    {
+                        "name": "contract_test_status",
+                        "type": "string",
+                        "required": false,
+                        "allowed_values": [
+                            "active",
+                            "inactive",
+                            "discontinued"
+                        ]
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "2.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    },
+                    {
+                        "name": "contract_test_status",
+                        "type": "string",
+                        "required": false,
+                        "allowed_values": [
+                            "active",
+                            "inactive"
+                        ]
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 9,
+            "title": "Add a new allowed enum value",
+            "category": "Conditional change",
+            "expected_result": "REVIEW_REQUIRED",
+            "description": "Add 'east' to the allowed values. Consumers must tolerate unknown values.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    },
+                    {
+                        "name": "contract_test_region",
+                        "type": "string",
+                        "required": false,
+                        "allowed_values": [
+                            "north",
+                            "south"
+                        ]
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "1.1.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    },
+                    {
+                        "name": "contract_test_region",
+                        "type": "string",
+                        "required": false,
+                        "allowed_values": [
+                            "north",
+                            "south",
+                            "east"
+                        ]
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        },
+        {
+            "id": 10,
+            "title": "Tighten freshness SLA",
+            "category": "SLA change",
+            "expected_result": "REVIEW_REQUIRED",
+            "description": "Reduce freshness limit from 60 to 30 minutes.",
+            "old_contract": {
+                "name": "merchandising-products",
+                "version": "1.0.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 60,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            },
+            "new_contract": {
+                "name": "merchandising-products",
+                "version": "1.1.0",
+                "owner": "merchandising-team",
+                "description": "Catalogue des produits cosmetiques",
+                "schema": [
+                    {
+                        "name": "product_id",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "brand",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "category",
+                        "type": "string",
+                        "required": true
+                    },
+                    {
+                        "name": "price",
+                        "type": "float",
+                        "required": true
+                    },
+                    {
+                        "name": "volume_ml",
+                        "type": "integer",
+                        "required": false
+                    },
+                    {
+                        "name": "stock_qty",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "updated_at",
+                        "type": "datetime",
+                        "required": true
+                    }
+                ],
+                "invariants": [
+                    "price > 0",
+                    "stock_qty >= 0",
+                    "product_id is unique"
+                ],
+                "sla": {
+                    "freshness_max_minutes": 30,
+                    "availability_percent": 99.5
+                },
+                "compatibility": "backward"
+            }
+        }
+    ]
+}
