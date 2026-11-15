@@ -9,6 +9,7 @@ schema:
   - {name: currency,       type: string, required: true}
   - {name: payment_method, type: string, required: true}
   - {name: payment_status, type: string, required: true}
+  - {name: updated_at,     type: datetime, required: true}
 invariants:
   - "amount > 0"
   - "invoice_id is unique"
