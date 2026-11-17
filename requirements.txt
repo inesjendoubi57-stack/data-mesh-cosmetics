@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+PyYAML
+requests
+httpx
+pytest
+django
+anthropic
