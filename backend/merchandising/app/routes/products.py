@@ -1,15 +1,25 @@
 
 import sqlite3
 
+from pathlib import Path
+
+import yaml
 from fastapi import APIRouter, HTTPException
 from app import database
 from app.schemas.product import Product, ProductInput
 
 router = APIRouter()
 
+CONTRACT_PATH = Path(__file__).resolve().parents[4] / "contracts" / "merchandising-products.yaml"
+
 @router.get("/", response_model=list[Product])
 def get_products():
     return database.list_products()
+
+@router.get("/contract")
+def get_contract():
+    with open(CONTRACT_PATH, "r", encoding="utf-8") as file:
+        return yaml.safe_load(file)
 
 @router.get("/{product_id}", response_model=Product)
 def get_product(product_id: str):

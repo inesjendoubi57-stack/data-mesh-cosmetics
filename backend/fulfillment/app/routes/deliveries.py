@@ -1,14 +1,24 @@
 
 import sqlite3
+from pathlib import Path
+
+import yaml
 from fastapi import APIRouter, HTTPException
 from app import database
 from app.schemas.delivery import Delivery, DeliveryInput
 
 router = APIRouter()
 
+CONTRACT_PATH = Path(__file__).resolve().parents[4] / "contracts" / "fulfillment-orders.yaml"
+
 @router.get("/", response_model=list[Delivery])
 def get_deliveries():
     return database.list_deliveries()
+
+@router.get("/contract")
+def get_contract():
+    with open(CONTRACT_PATH, "r", encoding="utf-8") as file:
+        return yaml.safe_load(file)
 
 @router.get("/{order_id}", response_model=Delivery)
 def get_delivery(order_id: str):
