@@ -27,6 +27,12 @@ app.include_router(
     tags=["Deliveries"]
 )
 
+app.include_router(
+    deliveries_router,
+    prefix="/api/v1/deliveries",
+    tags=["Deliveries v1 (Data Product)"]
+)
+
 # Route principale
 @app.get("/")
 def home():

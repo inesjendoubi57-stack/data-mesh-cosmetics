@@ -1,15 +1,25 @@
 
 import sqlite3
 
+from pathlib import Path
+
+import yaml
 from fastapi import APIRouter, HTTPException
 from app import database
 from app.schemas.payment import Payment, PaymentInput
 
 router = APIRouter()
 
+CONTRACT_PATH = Path(__file__).resolve().parents[4] / "contracts" / "finance-invoices.yaml"
+
 @router.get("/", response_model=list[Payment])
 def get_payments():
     return database.list_payments()
+
+@router.get("/contract")
+def get_contract():
+    with open(CONTRACT_PATH, "r", encoding="utf-8") as file:
+        return yaml.safe_load(file)
 
 @router.get("/{invoice_id}", response_model=Payment)
 def get_payment(invoice_id: str):
