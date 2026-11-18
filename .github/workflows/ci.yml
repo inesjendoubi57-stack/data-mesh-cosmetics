@@ -1,0 +1,55 @@
+
+name: Governance CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  governance-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Validate governance registry
+        run: python governance/validate_registry.py
+
+      - name: Run compatibility checker
+        run: python governance/check.py
+
+      - name: Contract change gate (blocks breaking changes)
+        env:
+          BASE_REF: origin/${{ github.base_ref || 'main' }}
+        run: python governance/check_contract_changes.py
+
+      - name: Run governance tests
+        run: python -m pytest governance -v
+
+      - name: Start the 3 domain services
+        run: |
+          (cd backend/merchandising && uvicorn app.main:app --port 8001 &)
+          (cd backend/fulfillment && uvicorn app.main:app --port 8002 &)
+          (cd backend/customer_finance && uvicorn app.main:app --port 8003 &)
+          sleep 5
+
+      - name: Validate producer payloads against the contracts
+        run: python -m pytest validators -v
+
