@@ -1,0 +1,37 @@
+{% extends "ui/base.html" %}
+{% load static %}
+{% block content %}
+<section class="hero">
+  <div class="copy">
+    <span class="label">Data Mesh</span>
+    <h1>Les données de la maison, publiées par ceux qui les produisent.</h1>
+    <p class="lead">Trois domaines, trois Data Products, un contrat chacun. Leur état est vérifié en direct.</p>
+    <form class="search" method="get">
+      <input type="search" name="q" value="{{ query }}" placeholder="Rechercher un data product">
+      <button>Rechercher</button>
+    </form>
+  </div>
+  <div class="shots">
+    <img src="{% static 'ui/rouge-a-levres.jpg' %}" alt="Rouges à lèvres alignés">
+    <img src="{% static 'ui/palette-fards.jpg' %}" alt="Palette de fards à paupières">
+  </div>
+</section>
+
+<div class="rows">
+  <div class="row head label">
+    <span>Data product</span><span>Domaine</span><span>Propriétaire</span><span>Version</span><span>Fraîcheur</span><span>État</span>
+  </div>
+  {% for product in products %}
+  <a class="row" href="{% url 'detail' product.name %}">
+    <span><span class="title">{{ product.name }}</span><br><span class="sub">{{ product.description }}</span></span>
+    <span>{{ product.domain }}</span>
+    <span>{{ product.owner }}</span>
+    <span>{{ product.current_version }}</span>
+    <span>{{ product.contract.sla.freshness_max_minutes }} min</span>
+    <span>{% include "ui/_status.html" with status=product.status %}</span>
+  </a>
+  {% empty %}
+  <p class="row muted">Aucun data product.</p>
+  {% endfor %}
+</div>
+{% endblock %}
