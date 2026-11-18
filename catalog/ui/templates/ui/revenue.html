@@ -1,0 +1,29 @@
+{% extends "ui/base.html" %}
+{% block title %}Analyse cross-domain{% endblock %}
+{% block content %}
+<div class="page-head">
+  <span class="label">Analyse cross-domain</span>
+  <h1>Chiffre d'affaires encaissé par catégorie</h1>
+  <p class="lead" style="max-width:640px">
+    La catégorie vient de <code>merchandising-products</code>, le lien commande → produit de
+    <code>fulfillment-orders</code>, le montant payé de <code>finance-invoices</code>.
+  </p>
+</div>
+
+{% if rows %}
+<div class="surface">
+<table>
+  <tr><th>Catégorie</th><th class="num">Encaissé (TND)</th><th style="width:55%"></th></tr>
+  {% for row in rows %}
+  <tr>
+    <td class="title">{{ row.category }}</td>
+    <td class="num">{{ row.total }}</td>
+    <td style="vertical-align:middle;padding-left:32px"><div class="bar" style="width: {{ row.width }}%"></div></td>
+  </tr>
+  {% endfor %}
+  <tr><td><strong>Total</strong></td><td class="num"><strong>{{ total }}</strong></td><td></td></tr>
+</table>
+</div>
+<p class="muted" style="margin-top:12px">Seules les factures payées sont comptées.</p>
+{% endif %}
+{% endblock %}

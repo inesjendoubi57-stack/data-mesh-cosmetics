@@ -1,0 +1,48 @@
+{% extends "ui/base.html" %}
+{% block title %}Changements · {{ product.name }}{% endblock %}
+{% block content %}
+{% if product %}
+<div class="page-head">
+  <a class="label" href="{% url 'detail' product.name %}">← {{ product.name }}</a>
+  <h1>Changements proposés</h1>
+  <p class="lead">Chaque proposition est comparée au contrat actif par le compatibility checker.</p>
+</div>
+
+{% if diff %}
+<div class="tabs">
+  {% for p in proposals %}<a href="?file={{ p.file }}" {% if p.file == selected %}class="on"{% endif %}>{{ p.file }}</a>{% endfor %}
+</div>
+
+<div class="facts" style="grid-template-columns: 1fr 1fr 2fr">
+  <div class="fact"><span class="label">Version active</span>{{ diff.old_version }}</div>
+  <div class="fact"><span class="label">Version proposée</span>{{ diff.new_version }}</div>
+  <div class="fact"><span class="label">Verdict</span>
+    {% if diff.status == "INCOMPATIBLE" %}<span class="badge bad">Breaking change · bloqué</span>
+    {% elif diff.status == "REVIEW_REQUIRED" %}<span class="badge warn">À faire relire</span>
+    {% else %}<span class="badge">Compatible</span>{% endif %}
+  </div>
+</div>
+
+<div class="surface">
+<table>
+  <tr><th>Changement détecté</th></tr>
+  {% for change in diff.changes %}
+  <tr><td>{{ change }}</td></tr>
+  {% empty %}
+  <tr><td class="muted">Aucun changement.</td></tr>
+  {% endfor %}
+</table>
+</div>
+
+<h2>Notes de migration</h2>
+<div class="surface" style="padding:24px">
+  <pre>{{ notes.text }}</pre>
+  <p class="muted" style="margin:16px 0 0">
+    {% if notes.by_ai %}Rédigé par l'assistant IA à partir de la comparaison ci-dessus.{% else %}Généré sans IA (clé API absente ou service indisponible).{% endif %}
+  </p>
+</div>
+{% else %}
+<p class="surface" style="padding:24px">Aucun changement proposé pour ce data product.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

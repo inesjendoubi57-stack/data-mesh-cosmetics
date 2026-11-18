@@ -1,0 +1,60 @@
+{% extends "ui/base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+{% if product %}
+<div class="page-head">
+  <span class="label">{{ product.domain }}</span>
+  <h1>{{ product.name }}</h1>
+  <p class="lead">{{ product.description }}</p>
+  {% include "ui/_status.html" %}
+</div>
+
+<div class="facts">
+  <div class="fact"><span class="label">Propriétaire</span>{{ product.owner }}</div>
+  <div class="fact"><span class="label">Version active</span>{{ product.current_version }}</div>
+  <div class="fact"><span class="label">SLA de fraîcheur</span>{{ contract.sla.freshness_max_minutes }} min</div>
+  <div class="fact"><span class="label">Âge des données</span>{% if status.age_minutes is not None %}{{ status.age_minutes }} min{% else %}inconnu{% endif %}</div>
+</div>
+
+<p><code>{{ product.endpoint }}</code></p>
+<p class="muted">Compatibilité {{ product.compatibility }} · disponibilité visée {{ contract.sla.availability_percent }} %</p>
+{% if proposals %}<p style="margin-top:24px"><a class="button label" style="margin:0;color:#000" href="{% url 'changes' product.name %}">{{ proposals|length }} changements proposés</a></p>{% endif %}
+
+{% if status.errors %}
+<h2>Écarts constatés</h2>
+<div class="alert">{% for e in status.errors %}{{ e }}<br>{% endfor %}</div>
+{% endif %}
+
+<h2>Schéma</h2>
+<div class="surface">
+<table>
+  <tr><th>Champ</th><th>Type</th><th>Obligatoire</th></tr>
+  {% for field in contract.schema %}
+  <tr>
+    <td><code>{{ field.name }}</code></td>
+    <td>{{ field.type }}</td>
+    <td>{% if field.required %}oui{% else %}non{% endif %}</td>
+  </tr>
+  {% endfor %}
+</table>
+</div>
+
+<h2>Invariants</h2>
+<p>{% for rule in contract.invariants %}<code style="margin-right:8px">{{ rule }}</code>{% endfor %}</p>
+
+<h2>Aperçu des données</h2>
+{% if preview %}
+<div class="surface">
+<table>
+  <tr>{% for col in columns %}<th>{{ col }}</th>{% endfor %}</tr>
+  {% for row in preview %}
+  <tr>{% for value in row %}<td>{{ value|default_if_none:"—" }}</td>{% endfor %}</tr>
+  {% endfor %}
+</table>
+</div>
+<p class="muted" style="margin-top:12px">{{ preview|length }} ligne(s) sur {{ row_count }}, lues en direct sur l'API du domaine.</p>
+{% else %}
+<p class="surface muted" style="padding:24px">Le domaine ne répond pas : aperçu indisponible.</p>
+{% endif %}
+{% endif %}
+{% endblock %}

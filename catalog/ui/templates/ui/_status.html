@@ -1,0 +1,4 @@
+{% if not status.reachable %}<span class="badge off">Injoignable</span>
+{% elif not status.valid %}<span class="badge bad">Contrat non respecté</span>
+{% elif not status.sla_respected %}<span class="badge warn">Données trop anciennes</span>
+{% else %}<span class="badge">Conforme</span>{% endif %}
