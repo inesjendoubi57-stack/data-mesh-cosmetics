@@ -27,6 +27,12 @@ app.include_router(
     tags=["Payments"]
 )
 
+app.include_router(
+    payments_router,
+    prefix="/api/v1/payments",
+    tags=["Payments v1 (Data Product)"]
+)
+
 # Route principale
 @app.get("/")
 def home():

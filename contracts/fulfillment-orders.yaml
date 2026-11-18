@@ -1,3 +1,4 @@
+
 name: fulfillment-orders
 version: 1.0.0
 owner: fulfillment-team
@@ -9,6 +10,7 @@ schema:
   - {name: status,     type: string,   required: true}
   - {name: carrier,    type: string,   required: false}
   - {name: shipped_at, type: datetime, required: false}
+  - {name: updated_at, type: datetime, required: true}
 invariants:
   - "quantity > 0"
   - "order_id is unique"

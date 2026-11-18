@@ -27,6 +27,42 @@ INITIAL_PRODUCTS = (
         volume_ml=50,
         stock_qty=30,
     ),
+    ProductInput(
+        product_id="3",
+        name="Vitamin C Serum",
+        brand="Vichy",
+        category="Skincare",
+        price=89.0,
+        volume_ml=30,
+        stock_qty=20,
+    ),
+    ProductInput(
+        product_id="4",
+        name="Eyeshadow Palette",
+        brand="L'Oreal",
+        category="Makeup",
+        price=115.0,
+        volume_ml=None,
+        stock_qty=0,
+    ),
+    ProductInput(
+        product_id="5",
+        name="Argan Shampoo",
+        brand="Garnier",
+        category="Haircare",
+        price=32.5,
+        volume_ml=250,
+        stock_qty=40,
+    ),
+    ProductInput(
+        product_id="6",
+        name="Eau de Parfum",
+        brand="Yves Rocher",
+        category="Fragrance",
+        price=210.0,
+        volume_ml=50,
+        stock_qty=12,
+    ),
 )
 
 
