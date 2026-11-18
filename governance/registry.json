@@ -1,4 +1,3 @@
-
 {
   "registry_version": "1.0",
   "path_convention": "repository_root",
@@ -8,6 +7,7 @@
       "domain": "Merchandising",
       "owner": "merchandising-team",
       "description": "Catalogue des produits cosmetiques",
+      "endpoint": "http://localhost:8001/api/v1/products/",
       "current_version": "1.0.0",
       "compatibility": "backward",
       "versions": [
@@ -23,6 +23,7 @@
       "domain": "Finance",
       "owner": "finance-team",
       "description": "Factures et paiements clients",
+      "endpoint": "http://localhost:8003/api/v1/payments/",
       "current_version": "1.0.0",
       "compatibility": "backward",
       "versions": [
@@ -38,6 +39,7 @@
       "domain": "Fulfillment",
       "owner": "fulfillment-team",
       "description": "Commandes en preparation et en livraison",
+      "endpoint": "http://localhost:8002/api/v1/deliveries/",
       "current_version": "1.0.0",
       "compatibility": "backward",
       "versions": [
@@ -50,3 +52,4 @@
     }
   ]
 }
+
