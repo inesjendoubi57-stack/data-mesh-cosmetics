@@ -1,9 +1,12 @@
 import json
+import logging
 import os
+import time
+import requests
 
-import anthropic
-
-MODEL = os.environ.get("LLM_MODEL", "claude-opus-5-5")
+MODEL = os.environ.get("LLM_MODEL", "gemini-3.8-flash")
+API_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+logger = logging.getLogger("ai_assistant")
 
 SYSTEM = (
     "Tu aides des analystes BI à suivre l'évolution d'un data contract. "
@@ -31,23 +34,43 @@ def plain_notes(diff):
     return "\n".join(lines)
 
 
+def ask_gemini(diff, api_key):
+    body = {
+        "system_instruction": {"parts": [{"text": SYSTEM}]},
+        "contents": [{"parts": [{"text": json.dumps(diff, ensure_ascii=False)}]}],
+    }
+
+    # 503 / 429 : le modèle est surchargé, on réessaie deux fois avant d'abandonner
+    for attempt in range(3):
+        response = requests.post(
+            API_URL.format(model=MODEL),
+            headers={"x-goog-api-key": api_key},
+            json=body,
+            timeout=30,
+        )
+        if response.status_code not in (429, 500, 503):
+            break
+        time.sleep(2 * (attempt + 1))
+
+    if response.status_code != 200:
+        raise RuntimeError(f"HTTP {response.status_code} : {response.text[:300]}")
+
+    parts = response.json()["candidates"][0]["content"]["parts"]
+    return "".join(part.get("text", "") for part in parts).strip()
+
+
 def explain_changes(diff):
-    if not os.environ.get("ANTHROPIC_API_KEY"):
+    api_key = os.environ.get("GEMINI_API_KEY")
+    if not api_key:
         return {"text": plain_notes(diff), "by_ai": False}
 
     try:
-        response = anthropic.Anthropic().beta.messages.create(
-            model=MODEL,
-            max_tokens=2000,
-            betas=["server-side-fallback-2026-07-01"],
-            fallbacks="default",
-            system=SYSTEM,
-            messages=[{"role": "user", "content": json.dumps(diff, ensure_ascii=False)}],
-        )
-    except anthropic.APIError:
+        text = ask_gemini(diff, api_key)
+    except Exception as error:
+        # L'IA est optionnelle : la page doit s'afficher même si l'appel échoue.
+        logger.warning("Assistant IA indisponible : %s", error)
         return {"text": plain_notes(diff), "by_ai": False}
 
-    text = "".join(block.text for block in response.content if block.type == "text").strip()
-    if response.stop_reason == "refusal" or not text:
+    if not text:
         return {"text": plain_notes(diff), "by_ai": False}
     return {"text": text, "by_ai": True}
