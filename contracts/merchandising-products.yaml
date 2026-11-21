@@ -1,5 +1,5 @@
 name: merchandising-products
-version: 1.0.0
+version: 2.0.0
 owner: merchandising-team
 description: Catalogue des produits cosmetiques
 schema:
@@ -7,12 +7,12 @@ schema:
   - {name: name, type: string, required: true}
   - {name: brand, type: string, required: true}
   - {name: category, type: string, required: true}
-  - {name: price, type: float, required: true}
+  - {name: unit_price, type: float, required: true}
   - {name: volume_ml, type: integer, required: false}
   - {name: stock_qty, type: integer, required: true}
   - {name: updated_at, type: datetime, required: true}
 invariants:
-  - "price > 0"
+  - "unit_price > 0"
   - "stock_qty >= 0"
   - "product_id is unique"
 sla:
