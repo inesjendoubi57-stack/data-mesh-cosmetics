@@ -5,10 +5,10 @@ Projet 32 (DS1) : Data Mesh pour une enseigne de cosmétiques. Trois domaines pu
 ## Lancer
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate        # Windows : .venv\Scripts\activate
-pip install -r requirements.txt
-python run_all.py
+
+pip install pipenv
+pipenv install
+pipenv run python run_all.py
 ```
 
 Ou avec Docker : `docker compose up --build`.
@@ -41,5 +41,4 @@ git checkout contracts/merchandising-products.yaml
 
 ## Notes
 
-- Chaque service a sa base SQLite, créée au démarrage. Supprimer les fichiers `.db` pour repartir des données de départ.
-- L'assistant IA du catalog utilise `ANTHROPIC_API_KEY`. Sans clé, il affiche un résumé sans IA.
+- L'assistant IA du catalog appelle l'API Gemini (`gemini-3.8-flash`). Mettre `GEMINI_API_KEY=...` dans un fichier `.env` à la racine. Sans clé, il affiche un résumé sans IA.
