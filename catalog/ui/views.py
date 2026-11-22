@@ -95,3 +95,14 @@ def revenue(request):
         for cat, total in sorted(totals.items(), key=lambda item: -item[1])
     ]
     return render(request, "ui/revenue.html", {"rows": rows, "total": round(sum(totals.values()), 2)})
+def lineage(request):
+    mermaid = """
+flowchart LR
+    MP["MERCHANDISING-PRODUCTS"] --> RBC["REVENUE-BY-CATEGORY"]
+    FO["FULFILLMENT-ORDERS"] --> RBC
+    FI["FINANCE-INVOICES"] --> RBC
+"""
+
+    return render(request, "ui/lineage.html", {
+        "mermaid": mermaid
+    })

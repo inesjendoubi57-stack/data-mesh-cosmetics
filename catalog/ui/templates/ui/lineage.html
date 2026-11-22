@@ -1,0 +1,16 @@
+{% extends "ui/base.html" %}
+{% block title %}Lineage{% endblock %}
+{% block content %}
+<div class="page-head">
+  <span class="label">Lineage</span>
+  <h1>Qui consomme quoi</h1>
+  <p class="lead">Chaque Data Product et le consommateur qui le lit.</p>
+</div>
+<div class="surface">
+  <pre class="mermaid">{{ mermaid }}</pre>
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: true, theme: "neutral" });
+</script>
+{% endblock %}
