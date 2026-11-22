@@ -1,0 +1,3 @@
+consumers:
+  - name: revenue-by-category
+    reads: [merchandising-products, fulfillment-orders, finance-invoices]
